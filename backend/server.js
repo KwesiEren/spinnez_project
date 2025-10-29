@@ -14,6 +14,7 @@ const communityRoutes = require('./routes/community');
 const mentorshipRoutes = require('./routes/mentorship');
 const eventsRoutes = require('./routes/events');
 const badgesRoutes = require('./routes/badges');
+const paystackRoutes = require('./routes/paystackRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -45,9 +46,6 @@ app.use('/api/community', communityRoutes);
 app.use('/api/mentorship', mentorshipRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/badges', badgesRoutes);
-
-// Paystack webhook (raw body)
-app.use('/api/paystack/webhook', express.raw({ type: 'application/json' }), paystackRoutes);
 app.use('/api/paystack', paystackRoutes);
 
 // health

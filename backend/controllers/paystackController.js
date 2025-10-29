@@ -64,16 +64,18 @@ exports.verifyPayment = async (req, res) => {
 
 exports.webhookHandler = async (req, res) => {
     try {
+        // The raw body is provided by the express.raw() middleware in paystackRoutes.js
+        const bodyString = req.body.toString();
         const secret = process.env.PAYSTACK_SECRET_KEY;
         const hash = crypto
             .createHmac('sha512', secret)
-            .update(JSON.stringify(req.body))
+            .update(bodyString)
             .digest('hex');
 
         if (hash !== req.headers['x-paystack-signature']) {
             return res.status(401).json({ message: 'Invalid signature' });
         }
-
+        req.body = JSON.parse(bodyString);
         const event = req.body.event;
         const data = req.body.data;
 
